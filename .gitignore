@@ -1,0 +1,10 @@
+.venv/
+.vscode/
+.vscode/*
+
+.env
+__pycache__/
+__pycache__/*
+
+./ccu_gen/
+ccu_gen/*

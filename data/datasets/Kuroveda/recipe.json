@@ -1,0 +1,7 @@
+{
+    "name": "Kuroveda",
+    "description": "Kuroveda include the story that takes place in the cruel world of the Hollows, Rifts and Echoes. The story follows the life of a Second Terrace boy named Rowan in his journey to attain peace and bury his father.",
+    "sources": [
+        { "name": "Kuroveda Chapters", "weight": 1.0 }
+    ]
+}

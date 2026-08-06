@@ -1,0 +1,9 @@
+{
+    "name": "Caption Cinematic Universe (CCU)",
+    "description": "Caption Cinematic Universe (CCU) is a dataset that tries to capture the absurd and weird world governed by the Thousand Diagrams and the chaos the characters experiences.The characters include Anna, Tricky, Juliya etc.",
+    "sources": [
+        { "name": "CCU Entries", "weight": 1.0 },
+        { "name": "CCU Convos", "weight": 1.0 }
+    ],
+    "vocab_size": 0
+}
