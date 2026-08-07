@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Iterable, List
+from typing import Sequence
 
 
 class BaseTokenizer(ABC):
@@ -31,7 +31,7 @@ class BaseTokenizer(ABC):
     """
 
     @abstractmethod
-    def encode(self, text: str) -> List[int]:
+    def encode(self, text: str) -> list[int]:
         """
         Convert text into a sequence of token IDs.
 
@@ -47,7 +47,7 @@ class BaseTokenizer(ABC):
 
 
     @abstractmethod
-    def decode(self, token_ids: Iterable[int]) -> str:
+    def decode(self, token_ids: Sequence[int]) -> str:
         """
         Convert token IDs back into text.
 
@@ -70,7 +70,7 @@ class BaseTokenizer(ABC):
         pass
 
     @abstractmethod
-    def id_to_token(self, token_id: int) -> str:
+    def id_to_token(self, token_id: int) -> str | None:
         """
         Return the token represented by an integer ID.
         """

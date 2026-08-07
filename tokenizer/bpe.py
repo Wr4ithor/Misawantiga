@@ -1,0 +1,65 @@
+from __future__ import annotations
+from typing import Sequence
+
+from .base import BaseTokenizer
+from pathlib import Path
+
+from tokenizers import Tokenizer
+
+
+class BPETokenizer(BaseTokenizer):
+    def __init__(self):
+        self._tokenizer: Tokenizer
+
+
+    def encode(self, text: str) -> list[int]:
+        encoded = self._tokenizer.encode(text)
+        return encoded.ids
+
+
+    def decode(self, token_ids: Sequence[int]) -> str:
+        decoded = self._tokenizer.decode(token_ids)
+        return decoded
+
+
+    def id_to_token(self, token_id: int) -> str | None:
+        token = self._tokenizer.id_to_token(token_id)
+        if token is None:
+            raise KeyError(f"Unknown ID: {token}")
+        
+        return token
+
+
+    def token_to_id(self, token: str) -> int | None:
+        idx = self._tokenizer.token_to_id(token)
+        if idx is None:
+            raise KeyError(f"Unknown Token: {idx}")
+        
+        return idx
+
+
+    def get_vocab(self) -> dict[str, int]:
+        return self._tokenizer.get_vocab()
+
+
+    def vocab_size(self) -> int:
+        return self._tokenizer.get_vocab_size()
+
+
+    def save(self, path: str | Path) -> None:
+        if not isinstance(path, Path):
+            path = Path(path)
+
+        if not path.exists():
+            raise FileNotFoundError(f"Unknown file: {path}")
+
+        self._tokenizer.save(str(path))
+
+
+    @classmethod
+    def load(cls, path: str | Path) -> None:
+        if not isinstance(path, Path):
+            tokenizer_file = Path(path)
+        if not tokenizer_file.exists():
+            raise FileNotFoundError("Tokenizer file doesn't exists")
+        cls._tokenizer = Tokenizer.from_file(str(tokenizer_file))
