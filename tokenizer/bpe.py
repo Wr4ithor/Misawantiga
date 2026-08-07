@@ -8,6 +8,10 @@ from tokenizers import Tokenizer
 
 
 class BPETokenizer(BaseTokenizer):
+    """
+    Doc string here
+    """
+
     def __init__(self):
         self._tokenizer: Tokenizer
 
