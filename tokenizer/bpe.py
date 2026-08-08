@@ -12,8 +12,8 @@ class BPETokenizer(BaseTokenizer):
     Class for BPE Tokenizer.
     """
 
-    def __init__(self):
-        self._tokenizer: Tokenizer
+    def __init__(self, tokenizer: Tokenizer):
+        self._tokenizer = tokenizer
 
 
     def encode(self, text: str) -> list[int]:
@@ -37,7 +37,7 @@ class BPETokenizer(BaseTokenizer):
     def token_to_id(self, token: str) -> int | None:
         idx = self._tokenizer.token_to_id(token)
         if idx is None:
-            raise KeyError(f"Unknown Token: {idx}")
+            raise KeyError(f"Unknown Token: {token}")
         
         return idx
 
@@ -54,16 +54,32 @@ class BPETokenizer(BaseTokenizer):
         if not isinstance(path, Path):
             path = Path(path)
 
-        if not path.exists():
-            raise FileNotFoundError(f"Unknown file: {path}")
+        path.parent.mkdir(parents=True, exist_ok=True)
 
         self._tokenizer.save(str(path))
 
 
     @classmethod
-    def load(cls, path: str | Path) -> None:
+    def load(cls, path: str | Path) -> BPETokenizer:
         if not isinstance(path, Path):
             path = Path(path)
         if not path.exists():
             raise FileNotFoundError("Tokenizer file doesn't exists")
-        cls._tokenizer = Tokenizer.from_file(str(path))
+        tokenizer = Tokenizer.from_file(str(path))
+        return cls(tokenizer)
+
+    @property
+    def pad_id(self) -> int:
+        return self._tokenizer.token_to_id("<PAD>")
+
+    @property
+    def unk_id(self) -> int:
+        return self._tokenizer.token_to_id("<UNK>")
+
+    @property
+    def bos_id(self) -> int:
+        return self._tokenizer.token_to_id("<BOS>")
+
+    @property
+    def eos_id(self) -> int:
+        return self._tokenizer.token_to_id("<EOS>")
