@@ -1,15 +1,15 @@
 from __future__ import annotations
-from typing import Sequence
 
-from .base import BaseTokenizer
+from typing import Sequence
 from pathlib import Path
 
+from .base import BaseTokenizer
 from tokenizers import Tokenizer
 
 
 class BPETokenizer(BaseTokenizer):
     """
-    Doc string here
+    Class for BPE Tokenizer.
     """
 
     def __init__(self):
@@ -63,7 +63,7 @@ class BPETokenizer(BaseTokenizer):
     @classmethod
     def load(cls, path: str | Path) -> None:
         if not isinstance(path, Path):
-            tokenizer_file = Path(path)
-        if not tokenizer_file.exists():
+            path = Path(path)
+        if not path.exists():
             raise FileNotFoundError("Tokenizer file doesn't exists")
-        cls._tokenizer = Tokenizer.from_file(str(tokenizer_file))
+        cls._tokenizer = Tokenizer.from_file(str(path))

@@ -6,5 +6,5 @@
 __pycache__/
 __pycache__/*
 
-./ccu_gen/
-ccu_gen/*
+.pytest_cache/
+.idea/
