@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from typing import Optional, BinaryIO, Any
 
 from tokenizer import BPETokenizer
-from misawantiga.config.defaults import Default
+from misawantiga.config.defaults import Config
 
 
 class DatasetEncoder:
@@ -132,8 +132,8 @@ class DatasetEncoder:
         if not input_file.exists():
             raise FileNotFoundError(f"Input file ({input_file}) doesn't exist")
 
-        if not str(output_file).endswith(Default.ENCODED_DS_EXT):
-            raise ValueError(f"Output file should be a {Default.ENCODED_DS_EXT} file")
+        if not str(output_file).endswith(Default.encoded_ds_ext):
+            raise ValueError(f"Output file should be a {Default.encoded_ds_ext} file")
 
         train_path, val_path = self._get_split_paths(output_file, val_ratio)
 
@@ -264,8 +264,8 @@ class DatasetEncoder:
         if not input_dir.is_dir():
             raise NotADirectoryError(f"'{input_dir}' is not a directory")
 
-        if not str(output_file).endswith(Default.ENCODED_DS_EXT):
-            raise ValueError(f"Output file should be a {Default.ENCODED_DS_EXT} file")
+        if not str(output_file).endswith(Default.encoded_ds_ext):
+            raise ValueError(f"Output file should be a {Default.encoded_ds_ext} file")
 
         if recursive:
             files = sorted(input_dir.rglob(pattern))
