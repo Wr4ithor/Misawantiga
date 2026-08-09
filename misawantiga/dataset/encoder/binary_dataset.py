@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 from pathlib import Path
 from typing import Iterator
 
@@ -18,7 +17,7 @@ class BinaryDataset(IterableDataset):
         dtype: np.dtype,
         shuffle: bool = True,
         seed: int = 36,
-        shuffle_block_size: int = 1000_000
+        shuffle_block_size: int = 100_000
     ):
         self.path = Path(path)
         self.block_size = block_size
