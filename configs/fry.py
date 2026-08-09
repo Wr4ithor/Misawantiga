@@ -1,17 +1,27 @@
-from dataclasses import dataclass
+from misawantiga.config.defaults import Config
+from pathlib import Path
 
 
-@dataclass
-class FryConfig:
-    name: str = "Misawantiga-CCU-Fry"
-    codename: str = "Fry"
+DATA_DIR = Path("data/datasets/CCU/entries")
 
-    vocab_size: int = 40_000
 
-    n_heads: int = 8
-    n_layers: int = 8
-    d_model: int = 512 # Embedding size
-    context_length: int = 512
-    ffn_dim: int = 4 * d_model
-
-    dropout: float = 0.1
+def make_config() -> Config:
+    return Config(
+        run_name="misawantiga-fry",
+        model_name="fry",
+        data_dir=DATA_DIR,
+        run_dir=Path("data/runs"),
+        hf_model_repo="StarOfRuin/misawantiga-fry-30M",
+        device="cpu",
+        dtype="float32",
+        # compile = False What is this?
+        batch_size=8,
+        num_workers=0,
+        pin_memory=False,
+        drop_last=False,
+        max_iters=50,
+        eval_interval=25,
+        eval_iters=5,
+        warmup_iters=10,
+        lr_decay_iters=50
+    )

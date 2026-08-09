@@ -26,6 +26,8 @@ class Config:
     d_model: int = 512
     dropout: float = 0.1
     bias: bool = False
+    ffn_dim: int = 4 * d_model
+    context: int = 512
 
     # ---- Architecture flags (Cube+; Fry/Shugen leave all false) ----
     # Cube and Shugen are future model ideas
@@ -58,6 +60,9 @@ class Config:
     eval_interval: int = 500
     eval_iters: int = 100
     log_interval: int = 10
+    num_workers: int = 2
+    pin_memory: bool = True
+    drop_last: bool = True
 
     # ----- System -----
     device: str = "cpu"
