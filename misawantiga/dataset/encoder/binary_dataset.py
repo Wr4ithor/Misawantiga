@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 from typing import Iterator
 
@@ -7,6 +5,7 @@ import torch
 import numpy as np
 import torch.distributed as dist
 from torch.utils.data import IterableDataset
+from torch.utils.data import get_worker_info
 
 
 class BinaryDataset(IterableDataset):
@@ -56,19 +55,19 @@ class BinaryDataset(IterableDataset):
             rank_end = num_samples # last rank takes the remainder
 
         # Split across DataLoader workers
-        worker_info = torch.utils.data.get_worker_info()
+        worker_info = get_worker_info()
         if worker_info is None: # Single process / no worker
             start, end = rank_start, rank_end
         else:
             per_worker = (rank_end - rank_start) // worker_info.num_workers
             start = rank_start + worker_info.id * per_worker
-            if worker_info.id < worker_info.num_workers -1:
+            if worker_info.id < worker_info.num_workers - 1:
                 end = start + per_worker
             else:
                 end = rank_end # last worker takes the remainder
 
         # Shuffling
-        seed = self.seed + self.epoch # Varying seeds / epoch
+        seed = self.seed + self.epoch # Varying seeds per epoch
         rng = np.random.default_rng(seed=seed)
         for block_start in range(start, end, self.shuffle_block_size):
             block_end = min(block_start + self.shuffle_block_size, end)
