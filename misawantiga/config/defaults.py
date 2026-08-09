@@ -1,5 +1,4 @@
 import numpy as np
-from pathlib import Path
 from dataclasses import dataclass
 
 
@@ -9,8 +8,6 @@ class Default:
     Codename = "Fry"
     
     ENCODED_DS_EXT = ".bin"
-    DATA_DIR = Path("data")
-    DATASET_DIR = DATA_DIR / "datasets"
 
     DTYPE_MAP = {
         "uint16": np.uint16,
