@@ -30,6 +30,8 @@ class BaseTokenizer(ABC):
         -serialization
     """
 
+    __name__ = "Base Tokenizer"
+
     @abstractmethod
     def encode(self, text: str) -> list[int]:
         """

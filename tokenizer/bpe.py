@@ -12,6 +12,8 @@ class BPETokenizer(BaseTokenizer):
     Class for BPE Tokenizer.
     """
 
+    __name__ = "Misawantiga BPE Tokenizer"
+
     def __init__(self, tokenizer: Tokenizer):
         self._tokenizer = tokenizer
 
