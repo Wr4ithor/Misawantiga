@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import importlib.util
 from pathlib import Path
+from numpy import int16, int32, int64, uint16, uint32, uint64
 
 
 @dataclass
@@ -16,7 +17,8 @@ class Config:
 
     # ---- Paths (Everything else derives from this) ----
     data_dir: Path = Path("data")
-    run_dir: Path = Path("data/runs")
+    run_dir: Path = Path("misawantiga/checkpoints")
+    dataset_dir: Path = data_dir / "datasets/CCU/entries"
 
     # ---- Model architecture ----
     vocab_size: int = 8192
@@ -77,21 +79,39 @@ class Config:
     hf_private: bool = True
     resume: bool = True
 
-    @property
-    def dataset_dir(self) -> Path:
-        return self.data_dir / "datasets/CCU/entries"
+    # --- dtype mappings ----
+    dtype_map = {
+        "uint16": uint16,
+        "uint32": uint32,
+        "uint64": uint64,
+        "int16": int16,
+        "int32": int32,
+        "int64": int64
+    }
 
     @property
     def train_bin(self) -> Path:
         return self.data_dir / "processed/train.bin"
 
     @property
+    def train_meta(self) -> Path:
+        return self.data_dir / "processed/train.meta.json"
+
+    @property
     def val_bin(self) -> Path:
         return self.data_dir / "processed/val.bin"
 
     @property
+    def val_meta(self) -> Path:
+        return self.data_dir / "processed/val.meta.json"
+
+    @property
     def tokenizer_path(self) -> Path:
         return self.data_dir / "datasets/CCU/ccu_bpe.json"
+
+    @property
+    def tokenizer_dir(self) -> Path:
+        return self.data_dir / "datasets/CCU/"
 
     @property
     def ckpt_dir(self) -> Path:

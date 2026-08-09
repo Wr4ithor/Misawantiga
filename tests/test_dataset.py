@@ -8,6 +8,17 @@ import torch
 
 from misawantiga.dataset.encoder.binary_dataset import BinaryDataset
 from misawantiga.dataset.encoder import binary_dataset
+from misawantiga.dataset.encoder.dataset_encoder import DatasetEncoder
+
+
+class DummyTokenizer:
+    eos_id = 0
+
+    def vocab_size(self):
+        return 32
+
+    def encode(self, text):
+        return [1, 2, 3]
 
 
 # ---------------------------------------------------------------------------
@@ -158,6 +169,21 @@ def test_sample_count(tmp_path):
     samples = collect_samples(dataset)
 
     assert len(samples) == 100 - block_size
+
+
+def test_split_paths_follow_train_val_convention(tmp_path):
+    encoder = DatasetEncoder(tokenizer=DummyTokenizer())
+    output_file = tmp_path / "custom.bin"
+
+    train_path, val_path = encoder._get_split_paths(output_file, 0.2)
+
+    assert train_path == tmp_path / "train.bin"
+    assert val_path == tmp_path / "val.bin"
+
+    train_path, val_path = encoder._get_split_paths(output_file, 0.0)
+
+    assert train_path == tmp_path / "train.bin"
+    assert val_path is None
 
 
 # ---------------------------------------------------------------------------

@@ -61,22 +61,20 @@ class DatasetEncoder:
     def _get_split_paths(
         self, output_file: Path, val_ratio: float
     ) -> tuple[Path, Optional[Path]]:
-        """Return (train_path, val_path). val_path is None when no split is requested."""
+        """Return (train_path, val_path) using the loader's expected train/val names."""
         if val_ratio <= 0.0:
-            return output_file, None
+            return output_file.with_name("train" + output_file.suffix), None
 
         if not (0.0 < val_ratio < 1.0):
             raise ValueError(f"val_ratio must be in (0, 1), got {val_ratio}")
 
-        stem = output_file.stem
-        suffix = output_file.suffix
-
-        train_path = output_file.with_name(f"{stem}.train{suffix}")
-        val_path = output_file.with_name(f"{stem}.val{suffix}")
-        return train_path, val_path
+        return (
+            output_file.with_name("train" + output_file.suffix),
+            output_file.with_name("val" + output_file.suffix),
+        )
 
     def _meta_path(self, bin_path: Path) -> Path:
-        """Convention: tokens.train.bin → tokens.train.meta.json"""
+        """Convention: train.bin → train.meta.json and val.bin → val.meta.json."""
         return bin_path.with_suffix(".meta.json")
 
     def _write_metadata(self, bin_path: Path, meta: dict[str, Any]) -> None:
@@ -132,8 +130,8 @@ class DatasetEncoder:
         if not input_file.exists():
             raise FileNotFoundError(f"Input file ({input_file}) doesn't exist")
 
-        if not str(output_file).endswith(Default.encoded_ds_ext):
-            raise ValueError(f"Output file should be a {Default.encoded_ds_ext} file")
+        if not str(output_file).endswith(Config.encoded_ds_ext):
+            raise ValueError(f"Output file should be a {Config.encoded_ds_ext} file")
 
         train_path, val_path = self._get_split_paths(output_file, val_ratio)
 
@@ -264,8 +262,8 @@ class DatasetEncoder:
         if not input_dir.is_dir():
             raise NotADirectoryError(f"'{input_dir}' is not a directory")
 
-        if not str(output_file).endswith(Default.encoded_ds_ext):
-            raise ValueError(f"Output file should be a {Default.encoded_ds_ext} file")
+        if not str(output_file).endswith(Config.encoded_ds_ext):
+            raise ValueError(f"Output file should be a {Config.encoded_ds_ext} file")
 
         if recursive:
             files = sorted(input_dir.rglob(pattern))

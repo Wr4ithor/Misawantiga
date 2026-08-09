@@ -52,8 +52,11 @@ class TokenizerTrainer:
             raise NotADirectoryError(f"{dir} is not a directory")
 
         files = [
-            str(file) for file in list(dir.glob("*.md"))
+            str(file) for file in sorted(dir.rglob("*.md"))
         ]
+
+        if not files:
+            raise FileNotFoundError(f"No markdown files found under '{dir}'")
 
         self._tokenizer = self._build_tokenizer()
 

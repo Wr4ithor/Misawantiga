@@ -58,7 +58,7 @@ class BPETokenizer(BaseTokenizer):
 
         path.parent.mkdir(parents=True, exist_ok=True)
         if not path.is_file():
-            new_path = path / "bpe_tokenizer.json"
+            new_path = path / "ccu_bpe.json"
             with open(new_path, "w") as f:
                 f.write("{}")
 

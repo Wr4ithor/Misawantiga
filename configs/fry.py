@@ -2,14 +2,14 @@ from misawantiga.config.defaults import Config
 from pathlib import Path
 
 
-DATA_DIR = Path("data/datasets/CCU/entries")
+DATASET_DIR = Path("data/datasets/CCU/entries")
 
 
 def make_config() -> Config:
     return Config(
         run_name="misawantiga-fry",
         model_name="fry",
-        data_dir=DATA_DIR,
+        dataset_dir=DATASET_DIR,
         run_dir=Path("data/runs"),
         hf_model_repo="StarOfRuin/misawantiga-fry-30M",
         device="cpu",
