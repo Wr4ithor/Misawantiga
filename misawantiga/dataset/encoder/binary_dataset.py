@@ -66,16 +66,26 @@ class BinaryDataset(IterableDataset):
             else:
                 end = rank_end # last worker takes the remainder
 
-        # Shuffling
-        seed = self.seed + self.epoch # Varying seeds per epoch
-        rng = np.random.default_rng(seed=seed)
-        for block_start in range(start, end, self.shuffle_block_size):
-            block_end = min(block_start + self.shuffle_block_size, end)
-            indices = np.arange(block_start, block_end, dtype=np.int64)
-            rng.shuffle(indices)
+        if self.shuffle:
+            # Shuffling
+            seed = self.seed + self.epoch # Varying seeds per epoch
+            rng = np.random.default_rng(seed=seed)
+            for block_start in range(start, end, self.shuffle_block_size):
+                block_end = min(block_start + self.shuffle_block_size, end)
+                indices = np.arange(block_start, block_end, dtype=np.int64)
+                rng.shuffle(indices)
 
-            # Yield the windows
-            for i in indices:
+                # Yield the windows
+                for i in indices:
+                    x = tokens[i : i + self.block_size]
+                    y = tokens[i + 1 : i + self.block_size + 1]
+
+                    yield (
+                        torch.from_numpy(x.copy()).long(),
+                        torch.from_numpy(y.copy()).long()
+                    )
+        else:
+            for i in range(start, end):
                 x = tokens[i : i + self.block_size]
                 y = tokens[i + 1 : i + self.block_size + 1]
 
