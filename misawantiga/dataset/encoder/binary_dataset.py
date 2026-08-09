@@ -1,19 +1,38 @@
 from __future__ import annotations
 
-import numpy as np
+import random
 from pathlib import Path
 from typing import Iterator
 
 import torch
+import numpy as np
 import torch.distributed as dist
 from torch.utils.data import IterableDataset
 
 
 class BinaryDataset(IterableDataset):
-    def __init__(self, path, block_size, dtype):
+    def __init__(
+        self,
+        path: str | Path,
+        block_size: int,
+        dtype: np.dtype,
+        shuffle: bool = True,
+        seed: int = 36,
+        shuffle_block_size: int = 1000_000
+    ):
         self.path = Path(path)
         self.block_size = block_size
         self.dtype = dtype
+
+        self.shuffle = shuffle
+        self.seed = seed
+        self.shuffle_block_size = shuffle_block_size
+
+        self.epoch = 0
+
+
+    def set_epoch(self, epoch: int) -> None:
+        self.epoch = epoch
 
 
     def __iter__(self) -> Iterator:
@@ -35,11 +54,11 @@ class BinaryDataset(IterableDataset):
         if rank < world_size - 1:
             rank_end = rank_start + per_rank
         else:
-            rank_end = num_samples
+            rank_end = num_samples # last rank takes the remainder
 
         # Split across DataLoader workers
         worker_info = torch.utils.data.get_worker_info()
-        if worker_info is None:
+        if worker_info is None: # Single process / no worker
             start, end = rank_start, rank_end
         else:
             per_worker = (rank_end - rank_start) // worker_info.num_workers
@@ -47,14 +66,22 @@ class BinaryDataset(IterableDataset):
             if worker_info.id < worker_info.num_workers -1:
                 end = start + per_worker
             else:
-                end = rank_end
+                end = rank_end # last worker takes the remainder
 
-        # Yield the windows
-        for i in range(start, end):
-            x = tokens[i : i + self.block_size]
-            y = tokens[i + 1 : i + self.block_size + 1]
+        # Shuffling
+        seed = self.seed + self.epoch # Varying seeds / epoch
+        rng = np.random.default_rng(seed=seed)
+        for block_start in range(start, end, self.shuffle_block_size):
+            block_end = min(block_start + self.shuffle_block_size, end)
+            indices = np.arange(block_start, block_end, dtype=np.int64)
+            rng.shuffle(indices)
 
-            yield (
-                torch.from_numpy(x.copy()).long(),
-                torch.from_numpy(y.copy()).long() # If you want int16, do y.astype(np.int16)
-            )
+            # Yield the windows
+            for i in indices:
+                x = tokens[i : i + self.block_size]
+                y = tokens[i + 1 : i + self.block_size + 1]
+
+                yield (
+                    torch.from_numpy(x.copy()).long(),
+                    torch.from_numpy(y.copy()).long()
+                )

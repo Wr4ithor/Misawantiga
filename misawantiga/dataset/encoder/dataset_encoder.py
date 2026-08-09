@@ -11,7 +11,9 @@ from config.defaults import Default
 
 
 class DatasetEncoder:
-    def __init__(self, tokenizer: BPETokenizer):
+    def __init__(
+        self, tokenizer: BPETokenizer
+    ):
         self._tokenizer = tokenizer
         self._dtype = (
             np.uint16
