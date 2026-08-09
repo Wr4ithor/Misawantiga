@@ -8,6 +8,3 @@ __pycache__/*
 
 .pytest_cache/
 .idea/
-
-data/processed/*.bin
-data/processed/*json

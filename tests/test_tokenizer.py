@@ -1,10 +1,7 @@
-from tokenizer.bpe import BPETokenizer
-# from config import Config
+from ..tokenizer import BPETokenizer
 
 
-# BPETokenizer.load(Config.DEFAULT_TOKENIZER)
-BPETokenizer.load("data/datasets/default_bpe.json")
-tokenizer = BPETokenizer()
+tokenizer = BPETokenizer.load("data/processed/bpe_tokenizer.json")
 
 
 def test_basic_english():
