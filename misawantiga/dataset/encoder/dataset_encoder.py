@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from typing import Optional, BinaryIO, Any
 
 from tokenizer import BPETokenizer
-from config.defaults import Default
+from misawantiga.config.defaults import Default
 
 
 class DatasetEncoder:

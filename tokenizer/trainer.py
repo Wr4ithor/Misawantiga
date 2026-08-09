@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from tokenizer import BPETokenizer
 
 from tokenizers import Tokenizer
 from tokenizers.models import BPE
@@ -67,4 +66,4 @@ class TokenizerTrainer:
 
         self._tokenizer.train(files=files, trainer=self._trainer)
 
-        return BPETokenizer(self._tokenizer)
+        return self._tokenizer
