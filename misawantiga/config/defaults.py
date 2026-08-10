@@ -49,6 +49,10 @@ class Config:
     muon_momentum: float = 0.95
     muon_ns_steps: int = 5  # Newton-Schulz iterations per step
 
+    adam_beta1: float = 0.9
+    adam_beta2: float = 0.95
+    adam_eps: float = 1e-8
+
     # ---- LR schedule ----
     warmup_iters: int = 200
     lr_decay_iters: int = 20000
