@@ -1,50 +1,77 @@
 import math
+import torch
 from torch.optim.lr_scheduler import _LRScheduler
 
 
 class WSDScheduler(_LRScheduler):
+
     def __init__(
-            self, optimizer, warmup_steps: int, stable_steps: int, decay_steps: int,
-            peak_lr=None, min_lr=0.0, decay_type="linear", last_epoch=-1
+        self,
+        optimizer: torch.optim.Optimizer,
+        warmup_steps: int,
+        stable_steps: int,
+        decay_steps: int,
+        peak_lr: float | None = None,
+        min_lr: float = 0.0,
+        decay_type: str = "cosine",
+        last_epoch: int = -1,
     ):
-        """
-        decay_type: "linear", "sqrt", "cosine", ...
-        If peak_lr is None, the optimizer's initial lr is treated as peak.
+        """Warmup-Stable-Decay (WSD) Learning Rate Scheduler for PyTorch.
+
+        Supports 'linear', 'cosine', and 'sqrt' decay phases.
         """
         self.warmup_steps = warmup_steps
         self.stable_steps = stable_steps
         self.decay_steps = decay_steps
         self.min_lr = min_lr
         self.decay_type = decay_type
-        self.last_epoch = last_epoch
-        super().__init__(optimizer, self.last_epoch) # type: ignore
-        # store the peak lrs from the optimizer
-        self.base_lrs = [group["lr"] for group in optimizer.param_groups]
-        if peak_lr is not None:
-            self.base_lrs = [peak_lr] * len(self.base_lrs)
+        self.peak_lr = peak_lr
 
+        # Base _LRScheduler init MUST be called after setting peak_lr logic
+        super().__init__(optimizer, last_epoch)
+
+    def _get_base_lrs(self):
+        """Helper to determine peak learning rates per parameter group."""
+        if self.peak_lr is not None:
+            return [self.peak_lr] * len(self.optimizer.param_groups)
+        return [group["lr"] for group in self.optimizer.param_groups]
 
     def get_lr(self):
-        step = self.last_epoch + 1
-        lrs = []
+        # self.last_epoch tracks current step (starts at 0)
+        step = self.last_epoch
 
-        for base_lr in self.base_lrs:
-            if step <= self.warmup_steps:
-                lr = base_lr * step / max(1, self.warmup_steps)
-            elif step <= self.warmup_steps + self.stable_steps:
+        lrs = []
+        base_lrs = self._get_base_lrs()
+
+        for base_lr in base_lrs:
+            # 1. Warmup Phase
+            if step < self.warmup_steps:
+                lr = base_lr * (step / max(1, self.warmup_steps))
+
+            # 2. Stable Phase
+            elif step < (self.warmup_steps + self.stable_steps):
                 lr = base_lr
+
+            # 3. Decay Phase
             else:
-                progress = (step - self.warmup_steps - self.stable_steps) / max(1, self.decay_steps)
-                progress = min(1.0, progress)
+                decay_progress = (
+                    step - self.warmup_steps - self.stable_steps
+                ) / max(1, self.decay_steps)
+                decay_progress = min(1.0, max(0.0, decay_progress))
 
                 if self.decay_type == "linear":
-                    factor = 1.0 - progress
+                    factor = 1.0 - decay_progress
                 elif self.decay_type == "cosine":
-                    factor = 0.5 * (1.0 + math.cos(math.pi * progress))
+                    factor = 0.5 * (1.0 + math.cos(math.pi * decay_progress))
                 elif self.decay_type == "sqrt":
-                    factor = 1.0 - math.sqrt(progress)
+                    factor = 1.0 - math.sqrt(decay_progress)
                 else:
-                    raise ValueError(f"Unknown decay_type {self.decay_type}")
+                    raise ValueError(
+                        f"Unsupported decay_type: '{self.decay_type}'. Choose 'linear', 'cosine', or 'sqrt'."
+                    )
+
                 lr = self.min_lr + (base_lr - self.min_lr) * factor
+
             lrs.append(lr)
+
         return lrs
