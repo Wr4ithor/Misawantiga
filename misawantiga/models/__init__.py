@@ -4,7 +4,7 @@ import torch.nn as nn
 
 from misawantiga.config.defaults import Config
 
-# from .fry import ARCH_FIELDS as FRY_FIELDS
+from .fry import ARCH_FIELDS as FRY_FIELDS
 from .fry import FryNetwork
 
 
@@ -24,7 +24,7 @@ MODEL_REGISTRY: dict[str, ModelSpec] = {
         codename="Fry",
         hf_repo="tbp",
         cls=FryNetwork,
-        arch_fields=()
+        arch_fields=FRY_FIELDS
     )
 }
 
