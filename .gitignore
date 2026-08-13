@@ -9,6 +9,6 @@ __pycache__/*
 .pytest_cache/
 .idea/
 
-data/processed/*
+# data/processed/*
 
 *_bpe.json
