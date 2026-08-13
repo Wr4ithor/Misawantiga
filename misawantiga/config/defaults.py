@@ -18,7 +18,7 @@ class Config:
 
     # ---- Paths (Everything else derives from this) ----
     data_dir: Path = Path("data")
-    run_dir: Path = Path("misawantiga/checkpoints")
+    run_dir: Path = data_dir / "runs/ckpt.pt"
     dataset_dir: Path = data_dir / "datasets/CCU/entries"
 
     # ---- Model architecture ----
@@ -55,9 +55,9 @@ class Config:
     adam_eps: float = 1e-8
 
     # ---- LR schedule ----
-    warmup_steps: int = 200
-    lr_decay_steps: int = 20000
-    min_lr: float = 3e-5
+    warmup_ratio: float = 0.01
+    decay_ratio: float = 0.1
+    min_lr: float = lr * 0.1
 
     # ---- Training loop ----
     epochs: float = 1.0  # passes over train.bin; resolves to max_iters at train start
