@@ -81,7 +81,7 @@ class DatasetEncoder:
         meta_path = self._meta_path(bin_path)
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2, ensure_ascii=False)
-        print(f"Wrote meta  → {meta_path}")
+        print(f"Wrote meta  -> {meta_path}")
 
     def _base_metadata(self, extra: dict[str, Any] | None = None) -> dict[str, Any]:
         """Common fields that appear in every metadata file."""
@@ -234,9 +234,9 @@ class DatasetEncoder:
                 ),
             )
 
-        print(f"Wrote train → {train_path}  ({train_tokens:,} tokens)")
+        print(f"Wrote train -> {train_path}  ({train_tokens:,} tokens)")
         if val_path:
-            print(f"Wrote val   → {val_path}  ({val_tokens:,} tokens)")
+            print(f"Wrote val   -> {val_path}  ({val_tokens:,} tokens)")
 
     def encode_dataset(
         self,
@@ -343,9 +343,9 @@ class DatasetEncoder:
                 ),
             )
 
-        print(f"Wrote train → {train_path}  ({train_tokens:,} tokens)")
+        print(f"Wrote train -> {train_path}  ({train_tokens:,} tokens)")
         if val_path:
-            print(f"Wrote val   → {val_path}  ({val_tokens:,} tokens)")
+            print(f"Wrote val   -> {val_path}  ({val_tokens:,} tokens)")
 
     def _encode_one_file(
         self,

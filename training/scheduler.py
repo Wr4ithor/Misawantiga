@@ -34,7 +34,7 @@ class WSDScheduler(_LRScheduler):
         """Helper to determine peak learning rates per parameter group."""
         if self.peak_lr is not None:
             return [self.peak_lr] * len(self.optimizer.param_groups)
-        return [group["lr"] for group in self.optimizer.param_groups]
+        return self.base_lrs
 
     def get_lr(self):
         # self.last_epoch tracks current step (starts at 0)

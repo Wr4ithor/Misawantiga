@@ -64,7 +64,8 @@ class TokenizerTrainer:
             vocab_size=self.vocab_size,
             min_frequency=self.min_frequency,
             show_progress=self.show_progress,
-            special_tokens=self.special_tokens
+            special_tokens=self.special_tokens,
+            initial_alphabet=ByteLevel.alphabet()
         )
 
         self._tokenizer.train(files=files, trainer=self._trainer)

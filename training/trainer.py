@@ -80,13 +80,13 @@ class Trainer:
 
         # Checkpoint resuming
         start_iter = 0
-        best_val_loss = float("-inf")
+        best_val_loss = float("inf")
         ckpt = try_resume(config)
         if ckpt is not None:
             model.load_state_dict(ckpt["model"])
             optimizer.load_state_dict(ckpt["optimizer"])
             start_iter = ckpt["iter_num"] + 1
-            best_val_loss = ckpt.get("best_val_loss", float("-inf"))
+            best_val_loss = ckpt.get("best_val_loss", float("inf"))
             for _ in range(start_iter):
                 scheduler.step()
             print(f"Resumed from step {start_iter}")
@@ -134,7 +134,7 @@ class Trainer:
                 dt = t1 - t0
                 t0 = t1
                 current_lr = scheduler.get_last_lr()[0]
-                tokens_per_sec = (config.batch_size * config.batch_size) / max(dt, 1e-6)
+                tokens_per_sec = (config.batch_size * config.block_size) / max(dt, 1e-6)
                 print(
                     f"Iter {iter_num:5d} | loss: {loss.item():.4f} | "
                     f"lr: {current_lr:.6f} | tok/s: {tokens_per_sec:,.0f} | "
@@ -148,23 +148,19 @@ class Trainer:
                 val_iter = iter(val_loader)
 
                 with torch.no_grad():
-                    # Average order eval_iters batches
+                    # Average over `eval_iters` batches
                     for _ in range(getattr(config, "eval_iters", 20)):
                         try:
                             vx, vy = next(val_iter)
                         except StopIteration:
                             break
-                        vx, vy, = vx.to(device, non_blocking=True), vy.to(device, non_blocking=True)
+                        vx, vy = vx.to(device, non_blocking=True), vy.to(device, non_blocking=True)
 
-                        with torch.amp.autocast(
-                            device_type=device.type, dtype=torch.bfloat16
-                        ):
-                            _, v_loss = model(x, y)
+                        with torch.amp.autocast(device_type=device.type, dtype=torch.bfloat16):
+                            _, v_loss = model(vx, vy)
                         val_losses.append(v_loss.item())
 
-                val_loss = (
-                    sum(val_losses) / len(val_losses) if val_losses else float("-inf")
-                )
+                val_loss = sum(val_losses) / len(val_losses) if val_losses else float("inf")
                 print(f"---- Eval at step {iter_num}: val_loss = {val_loss:.4f} ----")
 
                 is_best = val_loss < best_val_loss

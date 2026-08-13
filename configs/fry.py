@@ -22,6 +22,5 @@ def make_config() -> Config:
         max_iters=50,
         eval_interval=25,
         eval_iters=5,
-        warmup_steps=10,
-        lr_decay_steps=50
+        warmup_ratio=0.1
     )

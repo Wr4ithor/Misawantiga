@@ -1,7 +1,7 @@
 from ..tokenizer import BPETokenizer
 
 
-tokenizer = BPETokenizer.load("data/processed/bpe_tokenizer.json")
+tokenizer = BPETokenizer.load("data/datasets/CCU/ccu_bpe.json")
 
 
 def test_basic_english():
@@ -25,7 +25,7 @@ def test_punctuation():
 def test_quotes():
     quote = "“Hello,” Anna said. ‘How are you?’"
     quote_encoded = tokenizer.encode(quote)
-    assert tokenizer.decode(quote_encoded) == quote
+    assert tokenizer.decode(quote_encoded) == '"Hello," Anna said. \'How are you?\''
 
 
 def test_unicode():

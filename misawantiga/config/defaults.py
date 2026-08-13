@@ -18,7 +18,7 @@ class Config:
 
     # ---- Paths (Everything else derives from this) ----
     data_dir: Path = Path("data")
-    run_dir: Path = data_dir / "runs/ckpt.pt"
+    run_dir: Path = data_dir / "runs"
     dataset_dir: Path = data_dir / "datasets/CCU/entries"
 
     # ---- Model architecture ----

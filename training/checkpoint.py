@@ -73,8 +73,13 @@ def save_checkpoint(
         "tokenizer_sha256": tokenizer_sha256,
     }
     path = config.ckpt_path
+    # ensure the checkpoint directory exists
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
     torch.save(checkpoint, path)
-    print(f"  → saved checkpoint to {path} ({tag}, val {val_loss:.4f})")
+    print(f"  -> saved checkpoint to {path} ({tag}, val {val_loss:.4f})")
 
     if config.hf_ckpt_repo:
         try:
@@ -87,6 +92,6 @@ def save_checkpoint(
                 token=os.environ.get("HF_TOKEN"),
                 commit_message=f"iter {iter_num} | val {val_loss:.4f} ({tag})",
             )
-            print(f"  → pushed to {config.hf_ckpt_repo}")
+            print(f"  -> pushed to {config.hf_ckpt_repo}")
         except Exception as e:
             print(f"  ! Hub upload failed ({type(e).__name__}: {e}) — continuing")

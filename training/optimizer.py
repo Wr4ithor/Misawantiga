@@ -101,12 +101,12 @@ class Muon(torch.optim.Optimizer):
             update = zeropower_via_newtonschulz5(grad, group["ns_steps"]).to(p.dtype)
 
             if wd != 0.0:
-                p.mul_(1.0 - lr * wd)
+                p.data.mul_(1.0 - lr * wd)
 
             scale = max(1.0, p.size(-2) / p.size(-1)) ** 0.5
             update.mul_(scale)
 
-            p.add_(update, alpha=-lr)
+            p.data.add_(update, alpha=-lr)
 
 
     def _adamw_step(self, group: dict) -> None:
@@ -136,9 +136,9 @@ class Muon(torch.optim.Optimizer):
 
             denom = (exp_avg_sq.sqrt() / math.sqrt(bias2)).add_(eps)
             if wd != 0.0:
-                p.mul_(1.0 - lr * wd)
+                p.data.mul_(1.0 - lr * wd)
 
-            p.addcdiv_(exp_avg, denom, value=-lr / bias1)
+            p.data.addcdiv_(exp_avg, denom, value=-lr / bias1)
 
 
 def _classify_params(model: nn.Module) -> tuple[list[Tensor], list[Tensor], list[Tensor]]:
