@@ -1,0 +1,20 @@
+{
+  "dtype": "uint16",
+  "vocab_size": 3441,
+  "eos_id": 3,
+  "created_at": "2026-08-13T14:57:51.295797+00:00",
+  "tokenizer": {
+    "class": "BPETokenizer"
+  },
+  "source": "data\\datasets\\CCU\\entries",
+  "source_name": "entries",
+  "pattern": "*.md",
+  "recursive": true,
+  "n_files": 2,
+  "val_ratio": 0.05,
+  "seed": 42,
+  "split": "val",
+  "n_tokens": 907,
+  "n_examples": 48,
+  "bin_file": "val.bin"
+}
