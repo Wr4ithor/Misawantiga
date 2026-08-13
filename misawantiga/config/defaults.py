@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import importlib.util
 from pathlib import Path
-from numpy import int16, int32, int64, uint16, uint32, uint64
+from numpy import uint16, uint32, uint64, int16, int32, int64
+from torch import float16, float32, bfloat16
 
 
 @dataclass
@@ -54,8 +55,8 @@ class Config:
     adam_eps: float = 1e-8
 
     # ---- LR schedule ----
-    warmup_iters: int = 200
-    lr_decay_iters: int = 20000
+    warmup_steps: int = 200
+    lr_decay_steps: int = 20000
     min_lr: float = 3e-5
 
     # ---- Training loop ----
@@ -90,7 +91,10 @@ class Config:
         "uint64": uint64,
         "int16": int16,
         "int32": int32,
-        "int64": int64
+        "int64": int64,
+        "bfloat16": bfloat16,
+        "float16": float16,
+        "float32": float32
     }
 
     @property
@@ -120,6 +124,10 @@ class Config:
     @property
     def ckpt_dir(self) -> Path:
         return self.run_dir
+
+    @property
+    def ckpt_path(self) -> Path:
+        return self.run_dir / "ckpt.pt"
 
 
 def load_config(path: str) -> Config:
