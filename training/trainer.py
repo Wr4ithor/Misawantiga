@@ -1,6 +1,8 @@
+import os
 import json
 import time
 import torch
+import pathlib
 
 # Module imports
 from misawantiga.config.defaults import Config
@@ -39,17 +41,19 @@ class Trainer:
         )
 
     def train(self):
+        if os.name == "nt":
+            pathlib.PosixPath = pathlib.WindowsPath
         # Config and device setup
         config = self.config
         device = torch.device(config.device if torch.cuda.is_available() else "cpu")
 
-        print(f"\n==== Training run: {config.model_name} | Device: {device}")
+        print(f"\n==== Training run: {config.model_name} | Device: {device} ====")
 
         if torch.cuda.is_available():
             torch.set_float32_matmul_precision("high")
 
         # Datasets and loaders
-        print("Initializing datasets...")
+        print("\nInitializing datasets...")
         train_dataset = self.get_dataset(is_train=True)
         val_dataset = self.get_dataset(is_train=False)
 

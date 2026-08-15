@@ -11,16 +11,16 @@ def make_config() -> Config:
         model_name="fry",
         dataset_dir=DATASET_DIR,
         run_dir=Path("data/runs"),
-        hf_model_repo="StarOfRuin/misawantiga-fry-30M",
+        hf_model_repo="StarOfRuin/misawantiga-fry-38M",
         device="cpu",
         dtype="float32",
-        # compile = False What is this?
+        compile = False,
         batch_size=8,
         num_workers=0,
         pin_memory=False,
         drop_last=False,
-        max_iters=50,
-        eval_interval=25,
+        max_iters=200,
+        eval_interval=2,
         eval_iters=5,
         warmup_ratio=0.1
     )

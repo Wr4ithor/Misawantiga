@@ -66,7 +66,7 @@ class Config:
     gradient_accumulation_steps: int = 1
     eval_interval: int = 500
     eval_iters: int = 100
-    log_interval: int = 10
+    log_interval: int = 1
     num_workers: int = 2
     pin_memory: bool = True
     drop_last: bool = True
