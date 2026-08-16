@@ -30,6 +30,8 @@ def load_model_from_checkpoint(
         checkpoint_path, map_location=device, weights_only=False
     )
     print(f"\nIters completed: {checkpoint["iter_num"]}")
+    print(f"Best Val Loss: {checkpoint["best_val_loss"]}")
+    print(f"Current Val Loss: {checkpoint["val_loss"]}")
 
     model = FryNetwork(config)
 
