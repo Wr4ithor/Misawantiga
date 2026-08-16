@@ -73,7 +73,6 @@ Someone2: "Anna..."
 ---
 
 Anna's father: "For the Northern and the Last Descendence. Day 2018. Carbonina Kavi. Please Anna... We would have another department. Today and it's TV repair videos, please."
-
 Anna: "Don’t involve Lake Mathews. She still doesn’t know about the Descendence."
 
 Anna’s father: "Illegal mama type is on Alana. It's not me. Another city energy. Unlimited, even through the Libertia."
