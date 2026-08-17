@@ -38,7 +38,7 @@
         <div class="about-wrap">
             <h2>Built from scratch.</h2>
             <div class="abt-left">
-                <p style="margin-bottom: 1rem;">Misawantiga Fry (30M) is a small experimental language model trained from the ground up.</p>
+                <p style="margin-bottom: 1rem;">Misawantiga Fry (38M) is a small experimental language model trained from the ground up.</p>
                 <p style="margin-bottom: 1rem;">No API wrapper. No borrowed intelligence.</p>
                 <p>Just:</p>
                 <ul>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="bench-val">
-                    <span class="label">Hallucination</span>
+                    <span class="label hallu">Hallucination</span>
                     <div class="bar">
                         <div class="filled" style="width: 97%">.</div>
                     </div>
@@ -121,20 +121,97 @@
         <div class="grain-dark"></div>
         <div class="rev-wrap">
             <h2>What our users think.</h2>
-            <div class="usr-wrap">
-                <div class="card1">
-                    <blockquote>
 
+            <div class="usr-wrap">
+                <div class="paper-card" style="transform: rotate(3deg);">
+                    <blockquote>
+                        I asked for a business plan. Fry gave me "Mr_of_of_of_Ditto was spotted wearing a small café serving lukewarm tea." We pivoted to cafes. We're profitable in imaginary countries.
                     </blockquote>
+
+                    <p>
+                        Elena M. — Novelist, blocked (in a good way)
+                    </p>
                 </div>
 
-                <div class="card1">
+                <div class="paper-card" style="transform: rotate(-3deg);">
                     <blockquote>
-                        
+                        Hallucination 97% is not a bug. I pay for other models to hallucinate. Fry does it for free, with artistic intent.
                     </blockquote>
+
+                    <p>
+                        Milo — Professional Hallucination Enjoyer
+                    </p>
+                </div>
+
+                <div class="paper-card" style="transform: rotate(2deg);">
+                    <blockquote>
+                        We benchmarked Fry on Common Sense. She got 1.2%. We benchmarked her on Existential Dread. She got 89%. Finally, a model that understands academia.
+                    </blockquote>
+
+                    <p>
+                        Dr. Aris — PhD in Being Tired
+                    </p>
                 </div>
             </div>
+
+            <div class="more">
+                <button class="more-btn" onclick="prank()">
+                    42 More
+                </button>
+
+                <p class="prank">Aha! Gotcha.</p>
+            </div>
+
+            <div class="paw">
+                <img src="assets/paw.svg" alt="paw">
+            </div>
+        </div>
+        <div class="arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </div>
     </section>
+
+    <section id="models">
+        <div class="models-wrap">
+            <h2>Our Models.</h2>
+            <div class="model-container">
+                <a href="#" class="model">
+                    <img class="model-img" src="assets/Misawantiga-Cat-Light.svg" alt="fry">
+                    <h3>Fry</h3>
+                    <span class="size">38M</span>
+                    <div class="desc">
+                        <p>Small, experimental, and surprisingly functional.</p>
+                    </div>
+                </a>
+    
+                <a href="#" class="model">
+                    <img class="model-img" src="assets/Misawantiga-Cat-Light.svg" alt="fry">
+                    <h3>Shugen</h3>
+                    <span class="size">132M</span>
+                    <div class="desc">
+                        <p>Currently being built, presumably by someone who knows what they’re doing.</p>
+                    </div>
+                </a>
+    
+                <a href="#" class="model">
+                    <img class="model-img" src="assets/Misawantiga-Cat-Light.svg" alt="fry">
+                    <h3>Cube</h3>
+                    <span class="size">360M</span>
+                    <div class="desc">
+                        <p>Not built yet, but confidently pretending it will be.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+    </section>
+    <script>
+        const prankEle = document.querySelector(".prank");
+        const prank = () => {
+            prankEle.classList.toggle("show");
+        };
+    </script>
 </body>
 </html>
